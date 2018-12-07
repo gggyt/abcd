@@ -48,27 +48,38 @@ class Login extends React.Component{
 	}
 
 	getDate() {
-		let text = {username:this.state.username,password:this.state.password} //获取数据
-        let send = JSON.stringify(text);   //重要！将对象转换成json字符串
-        fetch(`http://127.0.0.1:8081/login`,{   //Fetch方法
+		console.log('this.state.userName'+this.state.username);
+		if (this.state.username.length==0) {
+			this.setState({fail: true});
+            this.setState({failReason: '请输入用户名'});
+			return;
+		}
+		if (this.state.password==0) {
+			this.setState({fail: true});
+            this.setState({failReason: '请输入密码'});
+			return;
+		}
+        fetch(`http://localhost:9999/userLogin/webLogin`,{   //Fetch方法
             method: 'POST',
             headers: {
-            	'Access-Token': 'xx',
-            	'Content-Type': 'application/json; charset=utf-8'
+            	'Access-Token': cookie.load('token'),
+            	'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-            body: send
+			body: 'username='+this.state.username+'&password='+this.state.password
+
         }).then(res => res.json()).then(
             data => {
-                if(data.success) {
+				window.alert('code'+data.code);
+                if(data.code==0) {
+					cookie.save('token', data.resultBean.token, 1000);
                 	window.alert('验证成功，欢迎登录');
-                	alert(cookie.load('token'));
-                	this.props.history.push('/main');
+                	console.log(cookie.load('token'));
+                	this.props.history.push('/home/index');
                 }
                 else {
                 	//cookie.remove('token');
-
                 	this.setState({fail: true});
-                	this.setState({failReason: data.success.toString()});
+                	this.setState({failReason: data.msg});
                 	return false;
                 }
             }
@@ -107,7 +118,7 @@ class Login extends React.Component{
 								<p>未注册? <a href="sign-up3.html">注册</a> | <a href="forgot3.html">忘记密码?</a></p>
 							</div>
 							<div className="form-group">
-								<input type="submit" value="Sign In" className="btn btn-primary" id="login" onClick={this.submit} />
+								<input type="submit" value="Sign In" className=" btn-primary1" id="login" onClick={this.submit} />
 							</div>
 						</form>
 
@@ -117,7 +128,7 @@ class Login extends React.Component{
 				<div className="row last" >
 					<div className="col-md-12 text-center"><p><small className="font-size">&copy;CUIT-ACM.GYT</small></p></div>
 				</div>
-		</div>
+			</div>
 		</div>
 		);
 	}
