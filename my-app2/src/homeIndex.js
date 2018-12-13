@@ -147,6 +147,28 @@ class Vidio extends React.Component{
 		)
 	}
 }
+
+class Foot extends React.Component{
+	render() {
+		return(
+			<div>
+				<footer id="colorlib-footer" role="contentinfo">
+					<div className="container">
+						<div className="row">
+							<div class="col-md-12">
+								<p>
+									<strong>
+									<center>@CUIT-ACM-GYT-XGG</center>
+									</strong>
+								</p>
+							</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		)
+	}
+}
 class HomeIndex extends React.Component{
 	
 	render() {
@@ -154,7 +176,7 @@ class HomeIndex extends React.Component{
 			<div>
 				<TopImg />
 				<Vidio />
-				
+				<Foot />
 			</div>
 		);
 	}

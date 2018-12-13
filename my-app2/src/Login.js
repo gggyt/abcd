@@ -62,7 +62,7 @@ class Login extends React.Component{
         fetch(`http://localhost:9999/userLogin/webLogin`,{   //Fetch方法
             method: 'POST',
             headers: {
-            	'Access-Token': cookie.load('token'),
+            	'Authorization': cookie.load('token'),
             	'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
 			body: 'username='+this.state.username+'&password='+this.state.password

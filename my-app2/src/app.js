@@ -6,7 +6,7 @@ import Register from './register';
 import Home from './home';
 import HomeIndex from './homeIndex';
 import TestHomp from './tmpHome';
-import Test from './new';
+import Test from './test';
 
 class App extends React.Component {
 	render() {
