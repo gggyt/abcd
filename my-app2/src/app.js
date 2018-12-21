@@ -8,6 +8,8 @@ import HomeIndex from './homeIndex';
 import TestHomp from './tmpHome';
 import Test from './test';
 
+import SidebarExample from './tesezc';
+
 class App extends React.Component {
 	render() {
 		return (
@@ -19,6 +21,8 @@ class App extends React.Component {
                     <Route path="/test" component={Test} />
                     <Route path="/home/index" component={HomeIndex} />
                     <Route path="/tt" component={TestHomp} />
+                    <Route path="/SidebarExample" component={SidebarExample} />
+					
 				</div>
             </Router>
 		)
