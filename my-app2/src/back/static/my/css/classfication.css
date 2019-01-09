@@ -10,4 +10,10 @@
 .search{
 	padding:3px;
 	margin:5px;
+	background-color: #ffffff;
+}
+.addButton{
+	padding: 10px;
+	margin: 10px;
+	float: right;
 }

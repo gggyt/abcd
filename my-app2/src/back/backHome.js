@@ -4,29 +4,12 @@ import { Menu, Icon, Button } from 'antd';
 import DatePicker from 'antd/lib/date-picker'; 
 import 'antd/lib/date-picker/style/css'; 
 import 'antd/dist/antd.css';
-import AddNews from './addNews';
-import Home from '../home';
-import PP from '../new';
-import Test from '../test';
 import './static/my/css/home.css';
+import routes from './config/backHomeConf';
 
 const SubMenu = Menu.SubMenu;
 
-const routes = [
-  {
-    path: "/addNews",
-    exact: true,
-    main: () => <AddNews />
-  },
-  {
-    path: "/bubblegum",
-    main: () => <Test />
-  },
-  {
-    path: "/shoelaces",
-    main: () => <h2>Shoelaces</h2>
-  }
-];
+
 class Aside extends React.Component {
   state = {
     collapsed: false,
@@ -63,8 +46,8 @@ class Aside extends React.Component {
             <span>Option 2</span>
           </Menu.Item>
           <Menu.Item key="3">
-            <Icon type="inbox" />
-            <span>Option 3</span>
+            <Link to="/classify"><Icon type="inbox" />
+            <span>目录</span></Link>
           </Menu.Item>
           <SubMenu key="sub1" title={<span><Icon type="desktop" /><span>新闻</span></span>}>
             <Menu.Item key="5">

@@ -18,8 +18,20 @@ class AddNewss extends React.Component {
   constructor(props, context) {
       super(props, context);
       this.state = {
-        editorContent: ''
+        editorContent: '',
+        title: '',
+        classifies: ''
       }
+      this.titleChange = this.titleChange.bind(this);
+      this.classifiesChange = this.classifiesChange.bind(this);
+  }
+  titleChange(e) {
+      this.setState({title: e.target.value});
+      console.log(this.state.title);
+  }
+  classifiesChange(checkedValues) {
+      this.setState({classifies: checkedValues});
+      console.log(this.state.classifies);
   }
   render() {
     return (
@@ -29,7 +41,7 @@ class AddNewss extends React.Component {
           <h2>撰写新闻</h2>
         </div>
         <div className="inputTitle">
-          <Input size="small" placeholder="input with clear icon" allowClear/>
+          <Input size="small" placeholder="input with clear icon" style={{height:30}} onChange={this.titleChange}/>
         </div>
         <br/>
         <div className="inputTitle">
@@ -50,7 +62,7 @@ class AddNewss extends React.Component {
         </div>
         <div className="inputCatalog">
            <h3>分类</h3>
-            <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
+            <Checkbox.Group style={{ width: '100%' }} onChange={this.classifiesChange}>
             <Row>
               <Col span={24}><Checkbox value="A">AAAAAAAAAAA</Checkbox></Col>
               <Col span={24}><Checkbox value="B">B</Checkbox></Col>
