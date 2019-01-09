@@ -14,7 +14,7 @@ function onChange(checkedValues) {
   console.log('checked = ', checkedValues);
 }
 
-class AddNews extends React.Component {
+class AddNewss extends React.Component {
   constructor(props, context) {
       super(props, context);
       this.state = {
@@ -95,4 +95,4 @@ class AddNews extends React.Component {
   }
 }
 
-export default AddNews;
+export default AddNewss;

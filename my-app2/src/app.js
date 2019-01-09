@@ -10,6 +10,7 @@ import Test from './test';
 import PP from './new';
 import Aside from './back/backHome';
 import AddNews from './back/addNews';
+import AddNewss from './back/classification';
 
 import SidebarExample from './tesezc';
 
@@ -29,6 +30,7 @@ class App extends React.Component {
                     <Route path="/login" component={Login} />
                     <Route path="/pp" component={PP} />
                     <Route path="/addNews" component={AddNews} />
+                    <Route path="/classification" component={AddNewss} />
 
 					
 				</div>
