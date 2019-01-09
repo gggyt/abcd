@@ -7,6 +7,9 @@ import Home from './home';
 import HomeIndex from './homeIndex';
 import TestHomp from './tmpHome';
 import Test from './test';
+import PP from './new';
+import Aside from './back/backHome';
+import AddNews from './back/addNews';
 
 import SidebarExample from './tesezc';
 
@@ -22,6 +25,11 @@ class App extends React.Component {
                     <Route path="/home/index" component={HomeIndex} />
                     <Route path="/tt" component={TestHomp} />
                     <Route path="/SidebarExample" component={SidebarExample} />
+                    <Route path="/Aside" component={Aside} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/pp" component={PP} />
+                    <Route path="/addNews" component={AddNews} />
+
 					
 				</div>
             </Router>

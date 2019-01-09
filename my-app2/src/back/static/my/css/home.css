@@ -1,0 +1,8 @@
+.boxB{
+	display: flex;
+	min-height:100vh;
+	background-color: #F2F2F2;
+}
+.left{
+	background-color: rgb(0, 21, 41);
+}
