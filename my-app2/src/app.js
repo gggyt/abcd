@@ -11,6 +11,8 @@ import PP from './new';
 import Aside from './back/backHome';
 import AddNews from './back/addNews';
 import AddNewss from './back/classification';
+import Announcement from './back/announcement';
+import ShowAnnounce from './back/manageAnnouncement';
 
 import SidebarExample from './tesezc';
 
@@ -31,6 +33,8 @@ class App extends React.Component {
                     <Route path="/pp" component={PP} />
                     <Route path="/addNews" component={AddNews} />
                     <Route path="/classification" component={AddNewss} />
+                    <Route path="/announcement" component={Announcement} />
+                    <Route path="/ShowAnnounce" component={ShowAnnounce} />
 
 					
 				</div>

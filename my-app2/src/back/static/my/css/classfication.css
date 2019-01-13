@@ -3,7 +3,7 @@
 	margin: 10px;
 }
 .inputTitle{
-	padding: 10px;
+	padding: 0px;
 	margin: 10px;
 	background-color: #ffffff;
 }
@@ -16,4 +16,17 @@
 	padding: 10px;
 	margin: 10px;
 	float: right;
+}
+.searchPage{
+	float: right;
+	padding:3px;
+	margin:5px;
+	background-color: #ffffff;
+}
+.toolbar {
+border: 1px solid #ccc;/*设置下拉棒*/
+}
+.w-e-text-container {
+    border: 1px solid #ccc;
+    height: 450px !important;
 }

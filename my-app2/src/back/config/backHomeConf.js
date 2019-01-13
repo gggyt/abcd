@@ -3,6 +3,7 @@ import { Menu, Icon, Button, Input, Checkbox, Row, Col, Pagination,  Table, Divi
 
 import AddNews from '../addNews';
 import Classification from '../classification';
+import Announcement from '../announcement';
 
 const routes = [
   {
@@ -15,8 +16,8 @@ const routes = [
     main: () => <Classification />
   },
   {
-    path: "/shoelaces",
-    main: () => <h2>Shoelaces</h2>
+    path: "/announcement",
+    main: () => <Announcement />
   }
 ];
 export default routes;

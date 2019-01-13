@@ -6,6 +6,7 @@ import { Menu, Icon, Button, Input, Checkbox, Row, Col } from 'antd';
 import 'antd/lib/date-picker/style/css'; 
 import 'antd/dist/antd.css';
 import './static/my/css/news.css';
+import './static/my/css/classfication.css';
 require('../static/css/style.css');
 require('../static/css/bootstrap.min.css');
 require('../static/my/css/login.css');
@@ -45,7 +46,7 @@ class AddNewss extends React.Component {
         </div>
         <br/>
         <div className="inputTitle">
-        <div ref="editorElem" className="text">
+        <div ref="editorElem" className="toolbar">
         </div>  
         </div>
 

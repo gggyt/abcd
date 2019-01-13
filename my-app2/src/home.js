@@ -81,9 +81,10 @@ class Home extends React.Component {
 					this.setState({haveUser: true});
 					this.setState({username: data.resultBean.username});
 					console.log('xxx'+this.state.username);
+
 				} else {
 					console.log('未登录');
-                	//this.props.history.push('/login');
+                	this.props.history.push('/login');
 				}
 			}
 	

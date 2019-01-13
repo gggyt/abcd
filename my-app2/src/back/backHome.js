@@ -50,19 +50,20 @@ class Aside extends React.Component {
             <span>目录</span></Link>
           </Menu.Item>
           <SubMenu key="sub1" title={<span><Icon type="desktop" /><span>新闻</span></span>}>
+            <Menu.Item key="6">
+            <Link to="/classify">目录</Link>
+            </Menu.Item>
             <Menu.Item key="5">
-            <Link to = "/addNews">添加新闻</Link></Menu.Item>
-            <Menu.Item key="6">Option 6</Menu.Item>
+            <Link to = "/addNews">添加新闻</Link>
+            </Menu.Item>
             <Menu.Item key="7">Option 7</Menu.Item>
             <Menu.Item key="8">Option 8</Menu.Item>
           </SubMenu>
-          <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>Navigation Two</span></span>}>
-            <Menu.Item key="9">Option 9</Menu.Item>
-            <Menu.Item key="10">Option 10</Menu.Item>
-            <SubMenu key="sub3" title="Submenu">
-              <Menu.Item key="11">Option 11</Menu.Item>
-              <Menu.Item key="12">Option 12</Menu.Item>
-            </SubMenu>
+          <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>公告</span></span>}>
+            <Menu.Item key="9">
+            <Link to="/announcement">添加公告</Link>
+            </Menu.Item>
+            <Menu.Item key="10">所有公告</Menu.Item>
           </SubMenu>
         </Menu>
         {routes.map((route, index) => (

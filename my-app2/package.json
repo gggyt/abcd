@@ -8,6 +8,8 @@
     "cookie-parser": "^1.4.3",
     "draft-js": "^0.10.5",
     "draftjs-to-html": "^0.8.4",
+    "eventemitter2": "^5.0.1",
+    "events": "^3.0.0",
     "html-to-draftjs": "^1.4.0",
     "jquery": "^3.3.1",
     "multer": "^1.4.1",
