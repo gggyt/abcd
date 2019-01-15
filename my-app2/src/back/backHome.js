@@ -63,7 +63,9 @@ class Aside extends React.Component {
             <Menu.Item key="9">
             <Link to="/announcement">添加公告</Link>
             </Menu.Item>
-            <Menu.Item key="10">所有公告</Menu.Item>
+            <Menu.Item key="10">
+            <Link to="/manageAnnounce">所有公告</Link>
+            </Menu.Item>
           </SubMenu>
         </Menu>
         {routes.map((route, index) => (

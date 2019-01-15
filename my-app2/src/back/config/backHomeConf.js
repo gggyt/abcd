@@ -4,6 +4,7 @@ import { Menu, Icon, Button, Input, Checkbox, Row, Col, Pagination,  Table, Divi
 import AddNews from '../addNews';
 import Classification from '../classification';
 import Announcement from '../announcement';
+import ShowAnnounce from '../manageAnnouncement';
 
 const routes = [
   {
@@ -18,6 +19,10 @@ const routes = [
   {
     path: "/announcement",
     main: () => <Announcement />
+  },
+  {
+    path: "/manageAnnounce",
+    main: () => <ShowAnnounce />
   }
 ];
 export default routes;

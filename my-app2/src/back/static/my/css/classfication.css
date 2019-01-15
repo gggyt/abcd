@@ -12,6 +12,10 @@
 	margin:5px;
 	background-color: #ffffff;
 }
+.searchF{
+	padding:3px;
+	margin:5px;
+}
 .addButton{
 	padding: 10px;
 	margin: 10px;
@@ -21,10 +25,9 @@
 	float: right;
 	padding:3px;
 	margin:5px;
-	background-color: #ffffff;
 }
 .toolbar {
-border: 1px solid #ccc;/*设置下拉棒*/
+	border: 1px solid #ccc;/*设置下拉棒*/
 }
 .w-e-text-container {
     border: 1px solid #ccc;

@@ -31,13 +31,13 @@ class App extends React.Component {
                     <Route path="/Aside" component={Aside} />
                     <Route path="/login" component={Login} />
                     <Route path="/pp" component={PP} />
-                    <Route path="/addNews" component={AddNews} />
+                    <Route path="/Aside/addNews" component={AddNews} />
                     <Route path="/classification" component={AddNewss} />
                     <Route path="/announcement" component={Announcement} />
                     <Route path="/ShowAnnounce" component={ShowAnnounce} />
 
 					
-				</div>
+			</div>
             </Router>
 		)
 	}
