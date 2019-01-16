@@ -9,3 +9,4 @@ export const AddAnnounce = localhost+"/announce/addAnnounce";
 export const UpdateAnnounce = localhost+"/announce/updateAnnounce";
 export const SelectAnnounce = localhost+"/announce/selectAnnounce";
 export const DeleteAnnounce = localhost+"/announce/deleteAnnounce";
+export const AnnounceDetail = localhost+"/announce/detail";

@@ -11,31 +11,18 @@ const SubMenu = Menu.SubMenu;
 
 
 class Aside extends React.Component {
-  state = {
-    collapsed: false,
-  }
-
-  toggleCollapsed = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
-  }
 
   render() {
     return (
-    <Router>
+    <Router basename="Aside">
     <div>
     <div><h5>1111</h5></div>
       <div  className="boxB">
-      <div className="left">
-        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
-          <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-        </Button>
+      <div className="left" >
         <Menu
           defaultSelectedKeys={['1']}
           mode="inline"
           theme="dark"
-          inlineCollapsed={this.state.collapsed}
         >
           <Menu.Item key="1">
             <Link to="/"><Icon type="pie-chart" />

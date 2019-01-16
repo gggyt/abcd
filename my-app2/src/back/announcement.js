@@ -118,7 +118,8 @@ class Announcement extends React.Component{
         </div>
         <br/>
         <div className="inputTitle">
-          <div ref="editorElem" className="toolbar" >
+          <div ref="editorElem" className="toolbar" onChange={onChange}>
+
           </div>  
         </div>
 
@@ -140,7 +141,7 @@ class Announcement extends React.Component{
 componentDidMount() {
     const elem = this.refs.editorElem
     const editor = new E(elem)
-	 editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
+	 editor.customConfig.uploadImgShowBase64 = false   // 使用 base64 保存图片
 	 editor.customConfig.uploadFileName = 'myFileName';
 	editor.customConfig.uploadImgServer = 'http://localhost:9999/uploadImg';
 	editor.customConfig.uploadImgHooks = { 
@@ -151,9 +152,12 @@ componentDidMount() {
 
     // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
     editor.customConfig.onchange = html => {
+      //window.alert(editor.txt.text());
       this.setState({
         editorContent: html
       })
+      console.log(this.state.editorContent);
+      console.log(editor.txt.text());
     }
     editor.create()
   }

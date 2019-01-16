@@ -9,13 +9,14 @@ import {SelectAnnounce} from '../config/router.js';
 import {DeleteAnnounce} from '../config/router.js';
 import {EventEmitter2} from 'eventemitter2'
 import Announcement from './announcement';
-
+import UpdateAnnouncement from './updateAnnouncement';
 var emitter = new EventEmitter2()
+var emitter2 = new EventEmitter2()
 
+const id = -1;
 class ShowTable extends React.Component{
   constructor(props) {
     super(props);
-    this.state={xx:0};
     this.tmp = this.tmp.bind(this);
     this.columns = [{
       title: '公告名',
@@ -34,20 +35,23 @@ class ShowTable extends React.Component{
       title: '操作',
       key: 'action',
       render: (text, record) => (
-        <div>
-        <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.announceId)}>
-          <a  href="javascript:;">删除</a>
-        </Popconfirm>
-        <Divider type="vertical" />
-        <a onClick={this.tmp}>修改</a>
-        </div>
+        <span>
+          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.announceId)}>
+            <a  href="javascript:;">删除</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <a href="javascript:;" onClick={()=>{this.tmp(record.announceId)}}>修改</a>
+        </span>
        ),
     }];
   }
-  tmp() {
-    this.setState({xx: 1});
+  tmp = (key) => {
+    console.log("------"+key);
+    emitter2.emit('changeShow', key);
+
   }
   handleDelete = (key) => {
+    console.log('+++++++'+key)
       fetch(DeleteAnnounce,{   //Fetch方法
             method: 'POST',
             headers: {
@@ -62,25 +66,18 @@ class ShowTable extends React.Component{
                   emitter.emit('changeFirstText', 'Second');
                 }
                 else {
-            window.alert(data.code.msg);
+                   window.alert(data.code.msg);
                 }
             }
         )
   }
 
   render() {
-    let re;
-    if (this.state.xx) {
-      re = <Announcement />
-    } 
-    else {
-      re = <Table columns={this.columns} dataSource={this.props.classAll} pagination={false} />
-    }
     return(
     <div>
-      {re}
+      <Table columns={this.columns} dataSource={this.props.classAll} pagination={false} />
       
-      </div>
+    </div>
     
     );
   }
@@ -91,7 +88,7 @@ class AllAnnounce extends React.Component{
     super(props);
     this.state={
       nowPage: 1,
-      totalPage: 2,
+      totalPage: 1,
       pageSize: 10,
       announceAll: '',
       announceTitle: '',
@@ -163,10 +160,35 @@ class AllAnnounce extends React.Component{
   }
 }
 class ShowAnnounce extends React.Component{
-
+  constructor(props) {
+    super(props);
+    this.state={
+      show: 1,
+      id: 1,
+    }
+    emitter2.on('changeShow', this.changeShow.bind(this))
+  }
+  changeShow(cid) {
+    if (this.state.show==1) {
+      this.setState({show:0});
+    } else {
+      this.setState({show:1});
+    }
+    this.setState({id: cid})
+  }
   render() {
+    console.log('show:'+this.state.show)
+    let sh;
+    if (this.state.show==1) {
+      sh = <AllAnnounce />
+    } else {
+    console.log('id:'+this.state.id)
+      sh = <UpdateAnnouncement announceId={this.state.id}/>
+    }
     return(
-      <AllAnnounce />
+      <div>
+      {sh}
+      </div>
     );
   }
 }
