@@ -146,7 +146,7 @@ class UpdateAnnouncement extends React.Component{
       <div>
       <div className="col-md-10">
         <div className="title">
-          <h2>撰写公告</h2>
+          <h2>修改公告</h2>
         </div>
         <div className="inputTitle">
           <Input size="small" value={this.state.announceTitle} placeholder="input with clear icon" style={{height:30}} onChange={this.titleChange}/>

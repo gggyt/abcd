@@ -5,68 +5,65 @@ import cookie from 'react-cookies';
 import 'antd/lib/date-picker/style/css'; 
 import 'antd/dist/antd.css';
 import './static/my/css/classfication.css';
-import {SelectAnnounce} from '../config/router.js';
+import {SelectUser} from '../config/router.js';
 import {DeleteAnnounce} from '../config/router.js';
-import {UpdateAnnounceFirst} from '../config/router.js';
 import {EventEmitter2} from 'eventemitter2'
+import {SelectNewsMain} from '../config/router.js';
+import {DeleteNewMain} from '../config/router.js';
+import {UpdateAnnounceFirst} from '../config/router.js';
+import {PassUser} from '../config/router.js';
+import {NotPassUser} from '../config/router.js';
+import {BeAdmin} from '../config/router.js';
+import {BePlayer} from '../config/router.js';
 import Announcement from './announcement';
 import UpdateAnnouncement from './updateAnnouncement';
+import UserDetail from './userDetail';
 var emitter = new EventEmitter2()
 var emitter2 = new EventEmitter2()
 
 const id = -1;
 
-class First extends React.Component{
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    let ret;
-    if (this.props.isFirst==1) {
-      ret = <a  className="font-red">取消置顶</a>
-    }
-    else{
-      ret = <a>置顶</a>
-    }
-    return(
-      <span>{ret}</span>
-    )
-  }
-}
 class ShowTable extends React.Component{
   constructor(props) {
     super(props);
-    this.tmp = this.tmp.bind(this);
-    this.changFirst = this.changFirst.bind(this);
     this.columns = [{
-      title: '公告名',
-      dataIndex: 'announceTitle',
-      key: 'announceTitle',
-      render: (text, record) => (
-        <span>
-          {record.isPublic==1?<p>{text}</p>:<p>{text} -- 草稿</p>}
-        </span>
-       ),
+      title: '手机号',
+      dataIndex: 'mobile',
+      key: 'mobile',
+      
     }, {
-      title: '作者',
-      dataIndex: 'announceCreateUser',
-      key: 'announceCreateUser',
+      title: '用户名',
+      dataIndex: 'username',
+      key: 'username',
     }, {
-      title: '创建时间',
-      dataIndex: 'announceCreateTime',
-      key: 'announceCreateTime',
+      title: '学号',
+      dataIndex: 'studentId',
+      key: 'studentId',
     },  {
+      title: '年级',
+      dataIndex: 'grade',
+      key: 'grade',
+    }, {
       title: '操作',
       key: 'action',
       render: (text, record) => (
         <span>
-          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.announceId)}>
-            <a  href="javascript:;">删除</a>
+        {
+          record.auth==0?<Popconfirm title="确定审核通过?" onConfirm={() => this.passUser(record.userId)}>
+            <a  href="javascript:;">审核通过</a>
+          </Popconfirm>:<a  className="font-red" href="javascript:;" onClick={()=>{this.notPassUser(record.userId)}}>取消审核</a>
+        }
+          
+          <Divider type="vertical" />
+          <a href="javascript:;" onClick={()=>{this.tmp(record.userId)}}>管理用户</a>
+          <Divider type="vertical" />
+          {
+            record.auth!=4&&record.auth!=5&&record.userId!=2?<Popconfirm title="确定设为管理员?" onConfirm={() => this.beAdmin(record.userId)}>
+            <a  href="javascript:;">设为管理员</a>
+          </Popconfirm>:<Popconfirm title="确定取消管理员?" onConfirm={() => this.bePlayer(record.userId)}>
+            <a className="font-red" href="javascript:;">取消管理员</a>
           </Popconfirm>
-          <Divider type="vertical" />
-          <a href="javascript:;" onClick={()=>{this.tmp(record.announceId)}}>修改</a>
-          <Divider type="vertical" />
-          {record.isFirst==1?<a  className="font-red" onClick={()=>{this.changFirst(record.announceId)}}>取消置顶</a>:<a onClick={()=>{this.changFirst(record.announceId)}}>置顶</a>}
+          }
         </span>
        ),
     }];
@@ -76,15 +73,14 @@ class ShowTable extends React.Component{
     emitter2.emit('changeShow', key);
 
   }
-  changFirst = (announceId) => {
-    console.log("------");
-    fetch(UpdateAnnounceFirst,{   //Fetch方法
+  passUser = (key) => {
+    fetch(PassUser,{   //Fetch方法
             method: 'POST',
             headers: {
               'Authorization': cookie.load('token'),
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-           body: 'announceId='+announceId
+           body: 'userId='+key
 
         }).then(res => res.json()).then(
             data => {
@@ -98,27 +94,70 @@ class ShowTable extends React.Component{
             }
         )
   }
-  handleDelete = (key) => {
-    console.log('+++++++'+key)
-      fetch(DeleteAnnounce,{   //Fetch方法
+  notPassUser = (key) => {
+    fetch(NotPassUser,{   //Fetch方法
             method: 'POST',
             headers: {
               'Authorization': cookie.load('token'),
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-           body: 'announceId='+key
+           body: 'userId='+key
 
         }).then(res => res.json()).then(
             data => {
                 if(data.code==0) {
                   emitter.emit('changeFirstText', 'Second');
+                  alert('操作成功');
                 }
                 else {
-                   window.alert(data.code.msg);
+                   alert(data.msg);
                 }
             }
         )
   }
+  beAdmin = (key) => {
+    fetch(BeAdmin,{   //Fetch方法
+            method: 'POST',
+            headers: {
+              'Authorization': cookie.load('token'),
+              'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+            },
+           body: 'userId='+key
+
+        }).then(res => res.json()).then(
+            data => {
+                if(data.code==0) {
+                  emitter.emit('changeFirstText', 'Second');
+                  alert('操作成功');
+                }
+                else {
+                   alert(data.msg);
+                }
+            }
+        )
+  }
+  bePlayer = (key) => {
+    fetch(BePlayer,{   //Fetch方法
+            method: 'POST',
+            headers: {
+              'Authorization': cookie.load('token'),
+              'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+            },
+           body: 'userId='+key
+
+        }).then(res => res.json()).then(
+            data => {
+                if(data.code==0) {
+                  emitter.emit('changeFirstText', 'Second');
+                  alert('操作成功');
+                }
+                else {
+                   alert(data.msg);
+                }
+            }
+        )
+  }
+  
 
   render() {
     return(
@@ -131,15 +170,15 @@ class ShowTable extends React.Component{
   }
 }
 
-class AllAnnounce extends React.Component{
+class ManageUser extends React.Component{
   constructor(props) {
     super(props);
     this.state={
       nowPage: 1,
       totalPage: 1,
       pageSize: 10,
-      announceAll: '',
-      announceTitle: '',
+      userAll: '',
+      name: '',
     }
     this.announceTitleChange = this.announceTitleChange.bind(this);
     this.buttonClick = this.buttonClick.bind(this);
@@ -153,29 +192,29 @@ class AllAnnounce extends React.Component{
     this.getClass();
   }
   getClass() {
-    fetch(SelectAnnounce, {
+    fetch(SelectUser, {
       method: 'POST',
       headers: {
         'Authorization': cookie.load('token'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: 'announceTitle='+this.state.announceTitle+'&pageNum='+this.state.nowPage
+      body: 'name='+this.state.name+'&pageNum='+this.state.nowPage
     }).then( res=> res.json()).then(
       data => {
         if (data.code==0) {
           this.setState({nowPage: data.resultBean.currentPage});
           this.setState({totalPage: data.resultBean.totalItems/data.resultBean.pageSize});
-          this.setState({announceAll: data.resultBean.items});
+          this.setState({userAll: data.resultBean.items});
         } else {
           this.setState({nowPage: 1});
           this.setState({totalPage: 1});
-          this.setState({announceAll: ''});
+          this.setState({userAll: ''});
         }
       }
     )
   }
   announceTitleChange(e) {
-    this.setState({announceTitle: e.target.value});
+    this.setState({name: e.target.value});
   }
   pageChange = (page) => {
     console.log(page);
@@ -189,16 +228,16 @@ class AllAnnounce extends React.Component{
     return(
       <div style={{ flex: 1, padding: "10px" }}>
         <div className="title">
-          <h3>公告</h3>
+          <h3>用户</h3>
         </div>
         <div className="searchF">
          <div className="example-input">
-          <Input size="small" onChange={this.announceTitleChange} placeholder="目录名" style={{height:30 , width:150}}/>
+          <Input size="small" onChange={this.announceTitleChange} placeholder="用户名" style={{height:30 , width:150}}/>
           &nbsp;&nbsp;<Button type="primary" shape="circle" icon="search" onClick={this.buttonClick}/>
           </div>
         </div>
         <div className="search"> 
-         <ShowTable classAll={this.state.announceAll}/>
+         <ShowTable classAll={this.state.userAll}/>
         </div>
         <div className="searchPage">
         <Pagination size="small" simple onChange={this.pageChange} total={this.state.totalPage*this.state.pageSize} defaultCurrent={this.state.nowPage} showQuickJumper />
@@ -207,7 +246,7 @@ class AllAnnounce extends React.Component{
     );
   }
 }
-class ShowAnnounce extends React.Component{
+class ShowUser extends React.Component{
   constructor(props) {
     super(props);
     this.state={
@@ -228,10 +267,10 @@ class ShowAnnounce extends React.Component{
     console.log('show:'+this.state.show)
     let sh;
     if (this.state.show==1) {
-      sh = <AllAnnounce />
+      sh = <ManageUser />
     } else {
-    console.log('id:'+this.state.id)
-      sh = <UpdateAnnouncement announceId={this.state.id}/>
+      console.log('id:'+this.state.id)
+      sh = <UserDetail userId={this.state.id}/>
     }
     return(
       <div>
@@ -240,4 +279,4 @@ class ShowAnnounce extends React.Component{
     );
   }
 }
-export default ShowAnnounce;
+export default ShowUser;

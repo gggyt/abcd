@@ -1,16 +1,18 @@
 import React from 'react';
 
-import { Menu, Icon, Button, Input, Checkbox, Row, Col, Pagination,  Table, Divider, Tag,Alert ,Popconfirm } from 'antd';
+import { Menu, Icon, Button, Input, Checkbox, Row, Col, Pagination,  Table, Divider, Tag,Alert ,Popconfirm, message } from 'antd';
 import cookie from 'react-cookies';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import 'antd/lib/date-picker/style/css'; 
 import 'antd/dist/antd.css';
-import './static/my/css/classfication.css';
-import {SelectAnnounce} from '../config/router.js';
-import {DeleteAnnounce} from '../config/router.js';
-import {UpdateAnnounceFirst} from '../config/router.js';
+import '../static/my/css/classfication.css';
+import {SelectCompetitionUrl} from '../../config/router.js';
+import {DeleteCompetitionUrl} from '../../config/router.js';
+import {UpdateAnnounceFirst} from '../../config/router.js';
+import {DoneCompetitionUrl} from '../../config/router.js';
 import {EventEmitter2} from 'eventemitter2'
-import Announcement from './announcement';
-import UpdateAnnouncement from './updateAnnouncement';
+import Announcement from '../announcement';
+import UpdateAnnouncement from '../updateAnnouncement';
 var emitter = new EventEmitter2()
 var emitter2 = new EventEmitter2()
 
@@ -37,93 +39,107 @@ class ShowTable extends React.Component{
   constructor(props) {
     super(props);
     this.tmp = this.tmp.bind(this);
-    this.changFirst = this.changFirst.bind(this);
     this.columns = [{
-      title: '公告名',
-      dataIndex: 'announceTitle',
-      key: 'announceTitle',
+      title: '校赛名',
+      dataIndex: 'competitionTitle',
+      key: 'competitionTitle',
       render: (text, record) => (
         <span>
-          {record.isPublic==1?<p>{text}</p>:<p>{text} -- 草稿</p>}
-        </span>
+        <a href="javascript:;"><Link to={'/personCompetition/'+record.competitionId}>{record.competitionTitle}</Link></a>
+          
+           </span>
        ),
     }, {
-      title: '作者',
-      dataIndex: 'announceCreateUser',
-      key: 'announceCreateUser',
+      title: '创建人',
+      dataIndex: 'createUser',
+      key: 'createUser',
     }, {
       title: '创建时间',
-      dataIndex: 'announceCreateTime',
-      key: 'announceCreateTime',
+      dataIndex: 'createDate',
+      key: 'createDate',
     },  {
       title: '操作',
       key: 'action',
       render: (text, record) => (
         <span>
-          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.announceId)}>
+        <a href="javascript:;"><Link to={'/detailCompetition/'+record.competitionId}>查看报名用户</Link></a>
+          <Divider type="vertical" />
+          <a href="javascript:;"><Link to={'/detailCompetition/'+record.competitionId}>修改</Link></a>
+          <Divider type="vertical" />
+          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.competitionId)}>
             <a  href="javascript:;">删除</a>
           </Popconfirm>
-          <Divider type="vertical" />
-          <a href="javascript:;" onClick={()=>{this.tmp(record.announceId)}}>修改</a>
-          <Divider type="vertical" />
-          {record.isFirst==1?<a  className="font-red" onClick={()=>{this.changFirst(record.announceId)}}>取消置顶</a>:<a onClick={()=>{this.changFirst(record.announceId)}}>置顶</a>}
-        </span>
+           </span>
        ),
-    }];
+    },{
+      title: '截至操作',
+      key: 'stopaction',
+      render: (text, record) => (
+        <span>
+          {
+            record.isDone==1?<a href="javascript:;"><Tag color="#108ee9" onClick={()=>this.doneCompetition(record.competitionId)}>截至报名</Tag></a>:
+            <Tag color="#f50">已结束</Tag>
+          }
+          
+          </span>
+       ),
+    }
+    ];
+  }
+  doneCompetition = (key) => {
+    fetch(DoneCompetitionUrl,{   //Fetch方法
+            method: 'POST',
+            headers: {
+              'Authorization': cookie.load('token'),
+              'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+            },
+           body: 'competitionId='+key
+
+        }).then(res => res.json()).then(
+            data => {
+                if(data.code==0) {
+                  emitter.emit('changeFirstText', 'Second');
+                  message.success('操作成功');
+                }
+                else {
+                   message.error(data.msg);
+                }
+            }
+        )
   }
   tmp = (key) => {
     console.log("------"+key);
     emitter2.emit('changeShow', key);
 
   }
-  changFirst = (announceId) => {
+  handleDelete = (competitionId) => {
     console.log("------");
-    fetch(UpdateAnnounceFirst,{   //Fetch方法
+    fetch(DeleteCompetitionUrl,{   //Fetch方法
             method: 'POST',
             headers: {
               'Authorization': cookie.load('token'),
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-           body: 'announceId='+announceId
+           body: 'competitionId='+competitionId
 
         }).then(res => res.json()).then(
             data => {
                 if(data.code==0) {
                   emitter.emit('changeFirstText', 'Second');
-                  alert('操作成功');
+                  message.success('操作成功');
                 }
                 else {
-                   alert(data.msg);
+                   message.error(data.msg);
                 }
             }
         )
   }
-  handleDelete = (key) => {
-    console.log('+++++++'+key)
-      fetch(DeleteAnnounce,{   //Fetch方法
-            method: 'POST',
-            headers: {
-              'Authorization': cookie.load('token'),
-              'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-            },
-           body: 'announceId='+key
-
-        }).then(res => res.json()).then(
-            data => {
-                if(data.code==0) {
-                  emitter.emit('changeFirstText', 'Second');
-                }
-                else {
-                   window.alert(data.code.msg);
-                }
-            }
-        )
-  }
+  
 
   render() {
     return(
     <div>
-      <Table columns={this.columns} dataSource={this.props.classAll} pagination={false} />
+      <Table columns={this.columns} dataSource={this.props.competitionAll} pagination={false} />
       
     </div>
     
@@ -138,10 +154,10 @@ class AllAnnounce extends React.Component{
       nowPage: 1,
       totalPage: 1,
       pageSize: 10,
-      announceAll: '',
-      announceTitle: '',
+      competitionAll: '',
+      competitionTitle: '',
     }
-    this.announceTitleChange = this.announceTitleChange.bind(this);
+    this.competitionTitleChange = this.competitionTitleChange.bind(this);
     this.buttonClick = this.buttonClick.bind(this);
     emitter.on('changeFirstText', this.changeText.bind(this))
   }
@@ -153,29 +169,35 @@ class AllAnnounce extends React.Component{
     this.getClass();
   }
   getClass() {
-    fetch(SelectAnnounce, {
+    //alert(this.state.competitionTitle);
+    fetch(SelectCompetitionUrl, {
       method: 'POST',
       headers: {
         'Authorization': cookie.load('token'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: 'announceTitle='+this.state.announceTitle+'&pageNum='+this.state.nowPage
+      body: 'competitionTitle='+this.state.competitionTitle+'&pageNum='+this.state.nowPage+'&pageSize='+this.state.pageSize
     }).then( res=> res.json()).then(
       data => {
         if (data.code==0) {
-          this.setState({nowPage: data.resultBean.currentPage});
+          if(data.resultBean.currentPage>0) {
+            this.setState({nowPage: data.resultBean.currentPage});
+          }else {
+            this.setState({nowPage: 1});
+          }
           this.setState({totalPage: data.resultBean.totalItems/data.resultBean.pageSize});
-          this.setState({announceAll: data.resultBean.items});
+          this.setState({competitionAll: data.resultBean.items});
         } else {
           this.setState({nowPage: 1});
           this.setState({totalPage: 1});
-          this.setState({announceAll: ''});
+          this.setState({competitionAll: ''});
+          message.error(data.msg);
         }
       }
     )
   }
-  announceTitleChange(e) {
-    this.setState({announceTitle: e.target.value});
+  competitionTitleChange(e) {
+    this.setState({competitionTitle: e.target.value}, ()=>this.getClass());
   }
   pageChange = (page) => {
     console.log(page);
@@ -193,21 +215,22 @@ class AllAnnounce extends React.Component{
         </div>
         <div className="searchF">
          <div className="example-input">
-          <Input size="small" onChange={this.announceTitleChange} placeholder="目录名" style={{height:30 , width:150}}/>
+          <Input size="small" onChange={this.competitionTitleChange} placeholder="校赛名" style={{height:30 , width:150}}/>
           &nbsp;&nbsp;<Button type="primary" shape="circle" icon="search" onClick={this.buttonClick}/>
           </div>
         </div>
         <div className="search"> 
-         <ShowTable classAll={this.state.announceAll}/>
+         <ShowTable competitionAll={this.state.competitionAll}/>
         </div>
         <div className="searchPage">
-        <Pagination size="small" simple onChange={this.pageChange} total={this.state.totalPage*this.state.pageSize} defaultCurrent={this.state.nowPage} showQuickJumper />
+        <Pagination size="small" simple onChange={this.pageChange} total={this.state.totalPage*this.state.pageSize}
+        pageSize={this.state.pageSize} defaultCurrent={this.state.nowPage} showQuickJumper />
       </div>
       </div>
     );
   }
 }
-class ShowAnnounce extends React.Component{
+class ShowCompetition extends React.Component{
   constructor(props) {
     super(props);
     this.state={
@@ -240,4 +263,4 @@ class ShowAnnounce extends React.Component{
     );
   }
 }
-export default ShowAnnounce;
+export default ShowCompetition;

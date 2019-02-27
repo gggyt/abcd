@@ -7,7 +7,7 @@ require('./static/css/home.css');
 class TopImg extends React.Component{
 	render() {
 		return (
-			<div>
+			<div style={{backgroundColor:'#FFFFFF'}}>
 				<aside id="colorlib-hero">
 					<div className="flexslider">
 						<ul className="slides">

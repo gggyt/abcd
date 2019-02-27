@@ -25,8 +25,8 @@ class Aside extends React.Component {
           theme="dark"
         >
           <Menu.Item key="1">
-            <Link to="/"><Icon type="pie-chart" />
-            <span>Option 1</span></Link>
+            <Link to="/manageUser"><Icon type="pie-chart" />
+            <span>用户管理</span></Link>
           </Menu.Item>
           <Menu.Item key="2">
             <Icon type="desktop" />
@@ -43,7 +43,9 @@ class Aside extends React.Component {
             <Menu.Item key="5">
             <Link to = "/addNews">添加新闻</Link>
             </Menu.Item>
-            <Menu.Item key="7">Option 7</Menu.Item>
+            <Menu.Item key="7">
+            <Link to = "/manageNews">所有新闻</Link>
+            </Menu.Item>
             <Menu.Item key="8">Option 8</Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>公告</span></span>}>
@@ -52,6 +54,22 @@ class Aside extends React.Component {
             </Menu.Item>
             <Menu.Item key="10">
             <Link to="/manageAnnounce">所有公告</Link>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub3" title={<span><Icon type="appstore" /><span>相册</span></span>}>
+            <Menu.Item key="11">
+            <Link to="/album">管理相册</Link>
+            </Menu.Item>
+            <Menu.Item key="12">
+            <Link to="/manageAnnounce">所有公告</Link>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub4" title={<span><Icon type="appstore" /><span>校赛</span></span>}>
+            <Menu.Item key="13">
+            <Link to="/competition">添加校赛</Link>
+            </Menu.Item>
+            <Menu.Item key="14">
+            <Link to="/manageCompetition">管理校赛</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>

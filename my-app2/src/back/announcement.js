@@ -60,7 +60,7 @@ class Announcement extends React.Component{
               'Authorization': cookie.load('token'),
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-            body: 'announceTitle='+this.state.announceTitle+'&announceBody='+encodeURI(this.state.editorContent)+'&isPublic='+this.state.isPublic
+            body: 'announceTitle='+this.state.announceTitle+'&announceBody='+(this.state.editorContent)+'&isPublic='+this.state.isPublic
 
         }).then(res => res.json()).then(
             data => {

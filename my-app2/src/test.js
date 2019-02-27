@@ -1,69 +1,56 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Menu, Icon, Button } from 'antd';
-import DatePicker from 'antd/lib/date-picker'; 
+import { Menu, Button, Input, Checkbox, Row, Col, Pagination, Table, Divider, Tag,Alert ,Popconfirm } from 'antd';
+import { Upload, Icon, message, Select,Modal  } from 'antd';
+import Cropper from './back/react-cropper';
+import {UploadImg1} from './config/router.js';      
 import 'antd/lib/date-picker/style/css'; 
 import 'antd/dist/antd.css';
 import './back/static/my/css/home.css';
 import routes from './back/config/backHomeConf';
-
-const SubMenu = Menu.SubMenu;
-
+import Back from './static/images/blog-1.jpg';
+import AvatarEditor from 'react-avatar-editor';
+import Slider from 'react-avatar-editor'
 
 class Test extends React.Component {
-  state = {
-    collapsed: false,
+  state = { visible: false }
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
   }
 
-  toggleCollapsed = () => {
+  handleOk = (e) => {
+    console.log(e);
     this.setState({
-      collapsed: !this.state.collapsed,
+      visible: false,
+    });
+  }
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
     });
   }
 
   render() {
     return (
-    <Router  basename="test">
-    <div>
-    <div><h5>1111</h5></div>
-      <div  className="boxB">
-      <div className="left">
-        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
-          <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
+      <div>
+        <Button type="primary" onClick={this.showModal}>
+          Open Modal
         </Button>
-        <Menu
-          defaultSelectedKeys={['1']}
-          mode="inline"
-          theme="dark"
-          inlineCollapsed={this.state.collapsed}
+        <Modal
+          footer={null}
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          style={{width: 800}}
+          width={700}  
         >
-          <SubMenu key="sub1" title={<span><Icon type="desktop" /><span>新闻</span></span>}>
-            <Menu.Item key="6">
-            <Link to="/classify">目录</Link>
-            </Menu.Item>
-            <Menu.Item key="5">
-            <Link to = "/addNews">添加新闻</Link>
-            </Menu.Item>
-            <Menu.Item key="7">Option 7</Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
-          </SubMenu>
-        </Menu>
+          <img alt="example" style={{ width: '100%' }} src="http://localhost:9999/image/tmp.jpg" />
+        </Modal>
       </div>
-      <div style={{ flex: 1, padding: "10px" }}>
-          {routes.map((route, index) => (
-            // Render more <Route>s with the same paths as
-            // above, but different components this time.
-            <Route
-              key={index}
-              path={route.path}
-              exact={route.exact}
-              component={route.main}
-            />
-          ))}
-        </div>
-      </div>
-      </div>
-      </Router>
     );
   }
 }

@@ -5,108 +5,64 @@ import cookie from 'react-cookies';
 import 'antd/lib/date-picker/style/css'; 
 import 'antd/dist/antd.css';
 import './static/my/css/classfication.css';
-import {SelectAnnounce} from '../config/router.js';
-import {DeleteAnnounce} from '../config/router.js';
+import {SelectNewsMain} from '../config/router.js';
+import {DeleteNewMain} from '../config/router.js';
 import {UpdateAnnounceFirst} from '../config/router.js';
 import {EventEmitter2} from 'eventemitter2'
 import Announcement from './announcement';
-import UpdateAnnouncement from './updateAnnouncement';
+import UpdateNews from './updateNews';
 var emitter = new EventEmitter2()
 var emitter2 = new EventEmitter2()
 
 const id = -1;
 
-class First extends React.Component{
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    let ret;
-    if (this.props.isFirst==1) {
-      ret = <a  className="font-red">取消置顶</a>
-    }
-    else{
-      ret = <a>置顶</a>
-    }
-    return(
-      <span>{ret}</span>
-    )
-  }
-}
+
 class ShowTable extends React.Component{
   constructor(props) {
     super(props);
     this.tmp = this.tmp.bind(this);
-    this.changFirst = this.changFirst.bind(this);
+   // this.changFirst = this.changFirst.bind(this);
     this.columns = [{
-      title: '公告名',
-      dataIndex: 'announceTitle',
-      key: 'announceTitle',
-      render: (text, record) => (
-        <span>
-          {record.isPublic==1?<p>{text}</p>:<p>{text} -- 草稿</p>}
-        </span>
-       ),
+      title: '新闻标题',
+      dataIndex: 'newsTitle',
+      key: 'newsTitle',
     }, {
       title: '作者',
-      dataIndex: 'announceCreateUser',
-      key: 'announceCreateUser',
+      dataIndex: 'createUser',
+      key: 'createUser',
     }, {
       title: '创建时间',
-      dataIndex: 'announceCreateTime',
-      key: 'announceCreateTime',
+      dataIndex: 'createDate',
+      key: 'createDate',
     },  {
       title: '操作',
       key: 'action',
       render: (text, record) => (
         <span>
-          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.announceId)}>
+          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.newsId)}>
             <a  href="javascript:;">删除</a>
           </Popconfirm>
           <Divider type="vertical" />
-          <a href="javascript:;" onClick={()=>{this.tmp(record.announceId)}}>修改</a>
-          <Divider type="vertical" />
-          {record.isFirst==1?<a  className="font-red" onClick={()=>{this.changFirst(record.announceId)}}>取消置顶</a>:<a onClick={()=>{this.changFirst(record.announceId)}}>置顶</a>}
-        </span>
+          <a href="javascript:;" onClick={()=>{this.tmp(record.newsId)}}>修改</a>
+           </span>
        ),
     }];
   }
   tmp = (key) => {
-    console.log("------"+key);
+    console.log("------ID："+key);
     emitter2.emit('changeShow', key);
 
   }
-  changFirst = (announceId) => {
-    console.log("------");
-    fetch(UpdateAnnounceFirst,{   //Fetch方法
-            method: 'POST',
-            headers: {
-              'Authorization': cookie.load('token'),
-              'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-            },
-           body: 'announceId='+announceId
-
-        }).then(res => res.json()).then(
-            data => {
-                if(data.code==0) {
-                  emitter.emit('changeFirstText', 'Second');
-                  alert('操作成功');
-                }
-                else {
-                   alert(data.msg);
-                }
-            }
-        )
-  }
+  
   handleDelete = (key) => {
     console.log('+++++++'+key)
-      fetch(DeleteAnnounce,{   //Fetch方法
+      fetch(DeleteNewMain,{   //Fetch方法
             method: 'POST',
             headers: {
               'Authorization': cookie.load('token'),
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-           body: 'announceId='+key
+           body: 'newsId='+key
 
         }).then(res => res.json()).then(
             data => {
@@ -114,7 +70,7 @@ class ShowTable extends React.Component{
                   emitter.emit('changeFirstText', 'Second');
                 }
                 else {
-                   window.alert(data.code.msg);
+                   window.alert(data.msg);
                 }
             }
         )
@@ -131,17 +87,17 @@ class ShowTable extends React.Component{
   }
 }
 
-class AllAnnounce extends React.Component{
+class AllNews extends React.Component{
   constructor(props) {
     super(props);
     this.state={
       nowPage: 1,
       totalPage: 1,
       pageSize: 10,
-      announceAll: '',
-      announceTitle: '',
+      newsAll: '',
+      newsTitle: '',
     }
-    this.announceTitleChange = this.announceTitleChange.bind(this);
+    this.newsTitleChange = this.newsTitleChange.bind(this);
     this.buttonClick = this.buttonClick.bind(this);
     emitter.on('changeFirstText', this.changeText.bind(this))
   }
@@ -153,29 +109,29 @@ class AllAnnounce extends React.Component{
     this.getClass();
   }
   getClass() {
-    fetch(SelectAnnounce, {
+    fetch(SelectNewsMain, {
       method: 'POST',
       headers: {
         'Authorization': cookie.load('token'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: 'announceTitle='+this.state.announceTitle+'&pageNum='+this.state.nowPage
+      body: 'newsTitle='+this.state.newsTitle+'&pageNum='+this.state.nowPage
     }).then( res=> res.json()).then(
       data => {
         if (data.code==0) {
           this.setState({nowPage: data.resultBean.currentPage});
           this.setState({totalPage: data.resultBean.totalItems/data.resultBean.pageSize});
-          this.setState({announceAll: data.resultBean.items});
+          this.setState({newsAll: data.resultBean.items});
         } else {
           this.setState({nowPage: 1});
           this.setState({totalPage: 1});
-          this.setState({announceAll: ''});
+          this.setState({newsAll: ''});
         }
       }
     )
   }
-  announceTitleChange(e) {
-    this.setState({announceTitle: e.target.value});
+  newsTitleChange(e) {
+    this.setState({newsTitle: e.target.value});
   }
   pageChange = (page) => {
     console.log(page);
@@ -189,16 +145,16 @@ class AllAnnounce extends React.Component{
     return(
       <div style={{ flex: 1, padding: "10px" }}>
         <div className="title">
-          <h3>公告</h3>
+          <h3>新闻</h3>
         </div>
         <div className="searchF">
          <div className="example-input">
-          <Input size="small" onChange={this.announceTitleChange} placeholder="目录名" style={{height:30 , width:150}}/>
+          <Input size="small" onChange={this.newsTitleChange} placeholder="目录名" style={{height:30 , width:150}}/>
           &nbsp;&nbsp;<Button type="primary" shape="circle" icon="search" onClick={this.buttonClick}/>
           </div>
         </div>
         <div className="search"> 
-         <ShowTable classAll={this.state.announceAll}/>
+         <ShowTable classAll={this.state.newsAll}/>
         </div>
         <div className="searchPage">
         <Pagination size="small" simple onChange={this.pageChange} total={this.state.totalPage*this.state.pageSize} defaultCurrent={this.state.nowPage} showQuickJumper />
@@ -207,7 +163,7 @@ class AllAnnounce extends React.Component{
     );
   }
 }
-class ShowAnnounce extends React.Component{
+class ShowNews extends React.Component{
   constructor(props) {
     super(props);
     this.state={
@@ -228,10 +184,10 @@ class ShowAnnounce extends React.Component{
     console.log('show:'+this.state.show)
     let sh;
     if (this.state.show==1) {
-      sh = <AllAnnounce />
+      sh = <AllNews />
     } else {
     console.log('id:'+this.state.id)
-      sh = <UpdateAnnouncement announceId={this.state.id}/>
+      sh = <UpdateNews newsId={this.state.id}/>
     }
     return(
       <div>
@@ -240,4 +196,4 @@ class ShowAnnounce extends React.Component{
     );
   }
 }
-export default ShowAnnounce;
+export default ShowNews;

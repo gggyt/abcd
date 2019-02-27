@@ -1,164 +1,146 @@
-import React,{Component} from 'react';
-import { render } from 'react-dom';
-import cookie from 'react-cookies';
-
-require('./static/css/icomoon.css');
-require('./static/css/home.css');
-
-const arr = [{
-		"title": "Home", "cssName": "", "result": true, "num": 0, "url":"#"
-    }, {
-		"title": "新闻", "cssName": "", "result": false, "num": 1, "url":"#"
-	}, {
-		"title": "BLOG", "cssName": "", "result": true, "num": 2, "url":"#"
-	}, {
-		"title": "荣誉", "cssName": "", "result": true, "num": 3, "url":"#"
-	}, {
-		"title": "吐槽", "cssName": "", "result": false, "num": 4, "url":"#"
-    },{
-		"title": "关于OJ", "cssName": "", "result": false, "num": 5, "url":"#"
-    },{
-		"title": "讲座", "cssName": "", "result": false, "num": 6, "url":"#"
-    },{
-		"title": "值班", "cssName": "", "result": false, "num": 7, "url":"#"
-    },{
-		"title": "加入我们", "cssName": "", "result": false, "num": 8, "url":"#"
+import React from 'react';
+import { Modal, Button } from 'antd';
+import {UploadImg1} from './config/router.js';      
+import 'antd/lib/date-picker/style/css'; 
+import 'antd/dist/antd.css';
+import './back/static/my/css/home.css';
+import routes from './back/config/backHomeConf';
+import Back from './static/images/blog-1.jpg';
+import AvatarEditor from 'react-avatar-editor';
+import Slider from 'react-avatar-editor';
+import { Upload, Icon } from 'antd';
+function convertBase64UrlToBlob(urlData){
+    var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
+    //处理异常,将ascii码小于0的转换为大于0
+    var ab = new ArrayBuffer(bytes.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < bytes.length; i++) {
+        ia[i] = bytes.charCodeAt(i);
     }
-]
-
-var indexN=0;
-
-class UserName extends React.Component{
-	render() {
-		return (
-			<div>
-				<ul>
-					<li className="f-right"><a href="#">{this.props.username}{this.props.url}</a></li>
-				</ul>
-			</div>
-		);
-	}
+    return new Blob( [ab] , {type : 'image/png'});
+}
+function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
 }
 class TestHomp extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = ({
-			haveUser: false,
-			username:'',
-			
-            
-        })
+  state = { visible: false }
+  constructor(props) {
+    super(props);
+    this.state = {
+      src: ""
     }
-
-	componentWillMount(){
-		this.getData();
-	}
-	getData() {
-		console.log('token'+cookie.load('token'));
-		fetch('http://localhost:9999/userLogin/getUserInfo', {
-			method: 'POST',
-			headers: {
-            	'Access-Token': cookie.load('token'),
-            	'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-            },
-		}).then( res => res.json()).then(
-			data => {
-				//console.log('token'+cookie.load('token'));
-			//	window.alert(data);
-				//window.alert(data.code);
-				if (data.code==0) {
-					this.setState({haveUser: true});
-					this.setState({username: data.resultBean.username});
-					console.log('xxx'+this.state.username);
-				} else {
-					console.log('登陆失败');
-                	//this.props.history.push('/login');
-				}
-			}
-	
-		)
-	}
-    fn(data, num) {
-        this.setState({
-            parentText: data
-        },() =>{
-           console.log('---');
-        });
-		console.log(num);
-		console.log(arr);
-		arr[indexN].cssName = '';
-		arr[num].cssName = 'active';
-		console.log(arr[num].text);
-        this.setState({arr, arr});
-		indexN = num;
-		console.log(indexN);
+    this.onChange = this.onChange.bind(this);
+  }
+  onChange(e) {
+    e.preventDefault();
+    let files;
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files;
+    } else if (e.target) {
+      files = e.target.files;
     }
- 
- 
- 
-    render() {
-		let userName;
-		console.log('have:'+this.state.haveUser);
-		if (this.state.haveUser) {
-			userName=<UserName username={this.state.username} url='xx' />
-		} else {
-			userName = <UserName username='登录' url='xx' />
-		}
-        return (
-		<div >
-			<nav className="colorlib-nav" role="navigation">
-				<div className="top-menu">
-					<div className="container">
-						<div className="row">
-							<div className="col-xs-2">
-								<div id="colorlib-logo"><a href="index.html">CUIT-ACM</a></div>
-							</div>
-							<div className="col-xs-9 text-right menu-1">
-									<MenuList arr={arr} pfn={this.fn.bind(this)} />
-							</div>
-							<div className="col-xs-1">
-								{userName}
-							</div>
-						</div>
-					</div>
-				</div>
-			</nav>
-			</div>
- 
-        )
-    }
-}
-
-class MenuList extends React.Component {
-   constructor(props) {
-        super(props);
-        this.state = ({
-            childText: "this is child text"
-        })
- 
-    }
-    clickFun(text, num) {
-        this.props.pfn(text, num)//这个地方把值传递给了props的事件当中
-    }
-    render() {
-        return (
-            <div className="list">
-                <ul>
-                    {
-                        this.props.arr.map(item => {
-                            return (
-                                <li className={item.cssName} onClick={this.clickFun.bind(this, item.title, item.num)}>
-                                    <a href="#">{item.title}</a>
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({ src: files[0] });
+    };
+    reader.readAsDataURL(files[0]);
+  }
+  onClickSave = () => {
+    if (this.editor) {
+            const canvas = this.editor.getImage();
+            console.log(canvas);
+            const canvasScaled = this.editor.getImageScaledToCanvas();
+            alert(canvas);
+             var image = new Image();  
+    // canvas.toDataURL 返回的是一串Base64编码的URL
+    // 指定格式 PNG  
+            image.crossOrigin = "*";
+      image =canvas.toDataURL("image/jpeg", 0.8);
+     alert(image);
+      const formData = new FormData()
+     formData.append('myFileName', dataURLtoFile(image, 'xx.jpg'));
+      fetch(UploadImg1,{   //Fetch方法
+      method: 'POST',
+      headers: {
+      },
+      body: formData
+      }).then(res => res.json()).then(
+        data => {
+          this.setState({imageUrl: data.data});
+          this.setState({loading: false});
+          window.alert(data.msg);
                 
-            </div>
-        )
+      })
     }
+    this.setState({
+      visible: false,
+    });
+  }
+  setEditorRef = (editor) => this.editor = editor
+  onAvatarUpload=() => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imgFile = e.target.result;
+      this.setState({
+        originImg: imgFile,
+      });
+    };
+    reader.readAsDataURL(this.file.input.files[0]);
+  }
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <Button type="primary" onClick={this.showModal}>
+          Open Modal
+        </Button>
+        <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onOk={this.onClickSave}
+          onCancel={this.handleCancel}
+        >
+          <input type="file" className="default" onChange={this.onChange} />
+         <AvatarEditor
+        image={this.state.src}
+        width={200}
+        height={200}
+        color={[248, 249, 250, 0.8]}
+        scale={1.0}
+        rotate={0}
+        style={{  margin: '0 5px' }}
+          ref={this.setEditorRef}
+          url={UploadImg1}
+          useCORS = {true}
+      	/>
+        </Modal>
+      </div>
+    );
+  }
 }
- 
- 
+
 export default TestHomp;
