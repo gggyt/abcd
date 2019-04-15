@@ -9,13 +9,14 @@ import 'antd/lib/date-picker/style/css';
 import 'antd/dist/antd.css';
 import '../static/my/css/news.css';
 import '../static/my/css/classfication.css';
-import {PersonCompetitionUrl} from '../../config/router.js';
+import {PersonLectureUrl} from '../../config/router.js';
+import {SelectClass} from '../../config/router.js';
 require('../../static/css/style.css');
 require('../../static/css/bootstrap.min.css');
 require('../../static/my/css/login.css');
 
 
-class PersonCompetition extends React.Component {
+class PersonLecture extends React.Component {
   constructor(props) {
     super(props);
     this.state={
@@ -51,13 +52,13 @@ class PersonCompetition extends React.Component {
     this.getClass();
   }
   getClass() {
-    fetch(PersonCompetitionUrl, {
+    fetch(PersonLectureUrl, {
       method: 'POST',
       headers: {
         'Authorization': cookie.load('token'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: 'competitionId='+this.props.match.params.id+'&pageNum='+this.state.nowPage+'&pageSize='+this.state.pageSize
+      body: 'lectureId='+this.props.match.params.id+'&pageNum='+this.state.nowPage+'&pageSize='+this.state.pageSize
     }).then( res=> res.json()).then(
       data => {
         if (data.code==0) {
@@ -95,4 +96,4 @@ class PersonCompetition extends React.Component {
   }
 }
 
-export default PersonCompetition;
+export default PersonLecture;

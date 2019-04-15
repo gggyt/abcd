@@ -1,5 +1,6 @@
 import React from 'react';
 import cookie from 'react-cookies';
+import {LoginUrl} from './config/router.js';
 require('./static/css/style.css');
 require('./static/css/bootstrap.min.css');
 require('./static/my/css/login.css');
@@ -59,7 +60,7 @@ class Login extends React.Component{
             this.setState({failReason: '请输入密码'});
 			return;
 		}
-        fetch(`http://localhost:9999/userLogin/webLogin`,{   //Fetch方法
+        fetch(LoginUrl,{   //Fetch方法
             method: 'POST',
             headers: {
             	'Authorization': cookie.load('token'),

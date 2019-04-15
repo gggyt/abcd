@@ -16,7 +16,6 @@ class Aside extends React.Component {
     return (
     <Router basename="Aside">
     <div>
-    <div><h5>1111</h5></div>
       <div  className="boxB">
       <div className="left" >
         <Menu
@@ -28,14 +27,18 @@ class Aside extends React.Component {
             <Link to="/manageUser"><Icon type="pie-chart" />
             <span>用户管理</span></Link>
           </Menu.Item>
-          <Menu.Item key="2">
-            <Icon type="desktop" />
-            <span>Option 2</span>
-          </Menu.Item>
-          <Menu.Item key="3">
+           <SubMenu key="sub14" title={<span><Icon type="desktop" /><span>论坛</span></span>}>
+            <Menu.Item key="20">
+            <Link to="/addInvitation">添加帖子</Link>
+            </Menu.Item>
+            <Menu.Item key="21">
+            <Link to = "/manageInvitation">管理帖子</Link>
+            </Menu.Item>
+          </SubMenu>
+          {/*<Menu.Item key="3">
             <Link to="/classify"><Icon type="inbox" />
             <span>目录</span></Link>
-          </Menu.Item>
+          </Menu.Item>*/}
           <SubMenu key="sub1" title={<span><Icon type="desktop" /><span>新闻</span></span>}>
             <Menu.Item key="6">
             <Link to="/classify">目录</Link>
@@ -46,7 +49,6 @@ class Aside extends React.Component {
             <Menu.Item key="7">
             <Link to = "/manageNews">所有新闻</Link>
             </Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>公告</span></span>}>
             <Menu.Item key="9">
@@ -60,9 +62,6 @@ class Aside extends React.Component {
             <Menu.Item key="11">
             <Link to="/album">管理相册</Link>
             </Menu.Item>
-            <Menu.Item key="12">
-            <Link to="/manageAnnounce">所有公告</Link>
-            </Menu.Item>
           </SubMenu>
           <SubMenu key="sub4" title={<span><Icon type="appstore" /><span>校赛</span></span>}>
             <Menu.Item key="13">
@@ -70,6 +69,24 @@ class Aside extends React.Component {
             </Menu.Item>
             <Menu.Item key="14">
             <Link to="/manageCompetition">管理校赛</Link>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub5" title={<span><Icon type="appstore" /><span>讲座</span></span>}>
+            <Menu.Item key="15">
+            <Link to="/addLecture">添加讲座</Link>
+            </Menu.Item>
+            <Menu.Item key="16">
+            <Link to="/managelecture">管理讲座</Link>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub6" title={<span><Icon type="appstore" /><span>友链</span></span>}>
+            <Menu.Item key="17">
+            <Link to="/manageFriendurl">管理友链</Link>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub7" title={<span><Icon type="appstore" /><span>值日</span></span>}>
+            <Menu.Item key="19">
+            <Link to="/manageDayDuty">管理值日</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>

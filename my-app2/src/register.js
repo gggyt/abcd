@@ -94,18 +94,20 @@ class Register extends React.Component{
 			this.setState({failReason: '两次密码不一致'});
 			return;
 		}
-		fetch(`http://localhost:9999/userLogin/register`, {
+		fetch(`http://192.168.31.69:9999/userLogin/register`, {
 			method: 'POST',
 			headers: {
             	'Authorization': cookie.load('token'),
             	'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-			body: 'mobile='+this.state.mobile+'&username='+this.state.username+'&number='+this.state.number+'&password='+this.state.password
+			body: 'mobile='+this.state.mobile+'&username='+this.state.username+'&number='+this.state.number+'&password='+this.state.password+'&openId='+cookie.load('openId')+'&image='+cookie.load('image')
 		}).then( res => res.json()).then(
 			data=>{
 				//window.alert(data);
 				if (data.code==0) {
 					this.setState({haveSend: 1});
+        			cookie.save('token', data.resultBean.token, 1000);
+         			this.props.history.push('/mobilefirst');
 				} else {
 					this.setState({haveSend: 2});
 					this.setState({failReason: data.msg});

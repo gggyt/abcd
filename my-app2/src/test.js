@@ -1,58 +1,112 @@
 import React from 'react';
-import { Menu, Button, Input, Checkbox, Row, Col, Pagination, Table, Divider, Tag,Alert ,Popconfirm } from 'antd';
-import { Upload, Icon, message, Select,Modal  } from 'antd';
-import Cropper from './back/react-cropper';
-import {UploadImg1} from './config/router.js';      
-import 'antd/lib/date-picker/style/css'; 
-import 'antd/dist/antd.css';
-import './back/static/my/css/home.css';
-import routes from './back/config/backHomeConf';
-import Back from './static/images/blog-1.jpg';
-import AvatarEditor from 'react-avatar-editor';
-import Slider from 'react-avatar-editor'
+import { Menu, Icon, Button, Input, Checkbox, Row, Col } from 'antd';
+import { List, InputItem, WhiteSpace } from 'antd-mobile';
+import { createForm } from 'rc-form';
 
-class Test extends React.Component {
-  state = { visible: false }
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import cookie from 'react-cookies';
+import E from 'wangeditor';
+import {AddNewsMain} from './config/router.js';
+import {UpdateNewsMain} from './config/router.js';
+import {SelectClass} from './config/router.js';
+const Item = List.Item;
+const Brief = Item.Brief;
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
+class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = ({
+       haveUser: false,
+       username:'',
+        image:'',
+        })
+    }
+
+  componentWillMount(){
+    this.getData();
   }
+  getData() {
+    console.log('token'+cookie.load('token'));
+    fetch('http://localhost:9999/userLogin/getUserInfo', {
+      method: 'POST',
+      headers: {
+              'Authorization': cookie.load('token'),
+              'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+            },
+    }).then( res => res.json()).then(
+      data => {
+        //console.log('token'+cookie.load('token'));
+      //  window.alert(data);
+      //  window.alert(data.code);
+      alert(data.code)
+        if (data.code==0) {
+          this.setState({haveUser: true});
+          this.setState({username: data.resultBean.username});
+          this.setState({image: data.resultBean.image});
+          console.log('xxx'+this.state.username);
 
-  handleOk = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
+        } else {
+          this.setState({haveUser: false});
+          console.log('未登录');
+          //        this.props.history.push('/login');
+        }
+      }
+  
+    )
   }
+   
+ 
+    render() {
+      let user;
+    if (this.state.haveUser) {
+      user=<h1>11</h1>
+    } else {
+      user = <h1>222</h1>
+    }
+      return(
+              <div >
+                {user}
+              </div>
+            
+        );
+    }
+}
 
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
+class AddNews extends React.Component {
+  componentDidMount() {
+    // this.autoFocusInst.focus();
   }
-
+  handleClick = () => {
+    this.inputRef.focus();
+  }
   render() {
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>
-          Open Modal
-        </Button>
-        <Modal
-          footer={null}
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          style={{width: 800}}
-          width={700}  
-        >
-          <img alt="example" style={{ width: '100%' }} src="http://localhost:9999/image/tmp.jpg" />
-        </Modal>
+        
+        <List renderHeader={() => 'Custom title（text / image / empty)'}>
+          <InputItem
+            placeholder="no label"
+          />
+          
+        </List>
+
+        
       </div>
     );
   }
 }
+
+class Test extends React.Component {
+  state = {
+    disabled: false,
+  }
+
+  render() {
+    return (<div>
+    <AddNews />
+    </div>);
+  }
+}
+
 
 export default Test;

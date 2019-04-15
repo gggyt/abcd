@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Menu, Icon, Button, Input, Checkbox, Row, Col, Pagination,  Table, Divider, Tag,Alert ,Popconfirm } from 'antd';
 import cookie from 'react-cookies';
 import 'antd/lib/date-picker/style/css'; 
@@ -55,7 +56,7 @@ class ShowTable extends React.Component{
         }
           
           <Divider type="vertical" />
-          <a href="javascript:;" onClick={()=>{this.tmp(record.userId)}}>管理用户</a>
+          <a href="javascript:;"><Link to={'/userDetail/'+record.userId}>管理用户</Link></a>
           <Divider type="vertical" />
           {
             record.auth!=4&&record.auth!=5&&record.userId!=2?<Popconfirm title="确定设为管理员?" onConfirm={() => this.beAdmin(record.userId)}>
@@ -198,12 +199,12 @@ class ManageUser extends React.Component{
         'Authorization': cookie.load('token'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: 'name='+this.state.name+'&pageNum='+this.state.nowPage
+      body: 'name='+this.state.name+'&pageNum='+this.state.nowPage+'&pageSize='+this.state.pageSize
     }).then( res=> res.json()).then(
       data => {
         if (data.code==0) {
           this.setState({nowPage: data.resultBean.currentPage});
-          this.setState({totalPage: data.resultBean.totalItems/data.resultBean.pageSize});
+          this.setState({totalPage: data.resultBean.totalPage});
           this.setState({userAll: data.resultBean.items});
         } else {
           this.setState({nowPage: 1});
@@ -240,7 +241,8 @@ class ManageUser extends React.Component{
          <ShowTable classAll={this.state.userAll}/>
         </div>
         <div className="searchPage">
-        <Pagination size="small" simple onChange={this.pageChange} total={this.state.totalPage*this.state.pageSize} defaultCurrent={this.state.nowPage} showQuickJumper />
+        <Pagination size="small" simple onChange={this.pageChange} total={this.state.totalPage*this.state.pageSize} 
+        pageSize={this.state.pageSize} defaultCurrent={this.state.nowPage} showQuickJumper />
       </div>
       </div>
     );

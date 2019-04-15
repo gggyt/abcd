@@ -3,6 +3,11 @@
 	padding: 10px;
 	min-height: 1000px;
 }
+.mobileBodyMain{
+    background-color: #F2F2F2;
+    padding: 10px;
+    min-height: 800px;
+}
 .invitationMain{
 	margin: 0 auto;
 	margin-top: 40px;

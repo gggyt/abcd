@@ -6,10 +6,10 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import 'antd/lib/date-picker/style/css'; 
 import 'antd/dist/antd.css';
 import '../static/my/css/classfication.css';
-import {SelectCompetitionUrl} from '../../config/router.js';
-import {DeleteCompetitionUrl} from '../../config/router.js';
+import {SelectLectureUrl} from '../../config/router.js';
+import {DeleteLectureUrl} from '../../config/router.js';
 import {UpdateAnnounceFirst} from '../../config/router.js';
-import {DoneCompetitionUrl} from '../../config/router.js';
+import {DoneLectureUrl} from '../../config/router.js';
 import {EventEmitter2} from 'eventemitter2'
 import Announcement from '../announcement';
 import UpdateAnnouncement from '../updateAnnouncement';
@@ -18,34 +18,18 @@ var emitter2 = new EventEmitter2()
 
 const id = -1;
 
-class First extends React.Component{
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    let ret;
-    if (this.props.isFirst==1) {
-      ret = <a  className="font-red">取消置顶</a>
-    }
-    else{
-      ret = <a>置顶</a>
-    }
-    return(
-      <span>{ret}</span>
-    )
-  }
-}
+
 class ShowTable extends React.Component{
   constructor(props) {
     super(props);
     this.tmp = this.tmp.bind(this);
     this.columns = [{
-      title: '校赛名',
-      dataIndex: 'competitionTitle',
-      key: 'competitionTitle',
+      title: '讲座名称',
+      dataIndex: 'lectureTitle',
+      key: 'lectureTitle',
       render: (text, record) => (
         <span>
-        <a href="javascript:;"><Link to={'/personCompetition/'+record.competitionId}>{record.competitionTitle}</Link></a>
+        <a href="javascript:;"><Link to={'/updateLecture/'+record.lectureId}>{record.lectureTitle}</Link></a>
           
            </span>
        ),
@@ -62,11 +46,11 @@ class ShowTable extends React.Component{
       key: 'action',
       render: (text, record) => (
         <span>
-        <a href="javascript:;"><Link to={'/personCompetition/'+record.competitionId}>查看报名用户</Link></a>
+        <a href="javascript:;"><Link to={'/personLecture/'+record.lectureId}>查看报名用户</Link></a>
           <Divider type="vertical" />
-          <a href="javascript:;"><Link to={'/detailCompetition/'+record.competitionId}>修改</Link></a>
+          <a href="javascript:;"><Link to={'/updateLecture/'+record.lectureId}>修改</Link></a>
           <Divider type="vertical" />
-          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.competitionId)}>
+          <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.lectureId)}>
             <a  href="javascript:;">删除</a>
           </Popconfirm>
            </span>
@@ -77,7 +61,7 @@ class ShowTable extends React.Component{
       render: (text, record) => (
         <span>
           {
-            record.isDone==1?<a href="javascript:;"><Tag color="#108ee9" onClick={()=>this.doneCompetition(record.competitionId)}>截至报名</Tag></a>:
+            record.isDone==1?<a href="javascript:;"><Tag color="#108ee9" onClick={()=>this.doneLecture(record.lectureId)}>截至报名</Tag></a>:
             <Tag color="#f50">已结束</Tag>
           }
           
@@ -86,14 +70,14 @@ class ShowTable extends React.Component{
     }
     ];
   }
-  doneCompetition = (key) => {
-    fetch(DoneCompetitionUrl,{   //Fetch方法
+  doneLecture = (key) => {
+    fetch(DoneLectureUrl,{   //Fetch方法
             method: 'POST',
             headers: {
               'Authorization': cookie.load('token'),
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-           body: 'competitionId='+key
+           body: 'lectureId='+key
 
         }).then(res => res.json()).then(
             data => {
@@ -112,15 +96,15 @@ class ShowTable extends React.Component{
     emitter2.emit('changeShow', key);
 
   }
-  handleDelete = (competitionId) => {
+  handleDelete = (lectureId) => {
     console.log("------");
-    fetch(DeleteCompetitionUrl,{   //Fetch方法
+    fetch(DeleteLectureUrl,{   //Fetch方法
             method: 'POST',
             headers: {
               'Authorization': cookie.load('token'),
               'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
             },
-           body: 'competitionId='+competitionId
+           body: 'lectureId='+lectureId
 
         }).then(res => res.json()).then(
             data => {
@@ -155,9 +139,9 @@ class AllAnnounce extends React.Component{
       totalPage: 1,
       pageSize: 10,
       competitionAll: '',
-      competitionTitle: '',
+      lectureTitle: '',
     }
-    this.competitionTitleChange = this.competitionTitleChange.bind(this);
+    this.lectureTitleChange = this.lectureTitleChange.bind(this);
     this.buttonClick = this.buttonClick.bind(this);
     emitter.on('changeFirstText', this.changeText.bind(this))
   }
@@ -170,13 +154,13 @@ class AllAnnounce extends React.Component{
   }
   getClass() {
     //alert(this.state.competitionTitle);
-    fetch(SelectCompetitionUrl, {
+    fetch(SelectLectureUrl, {
       method: 'POST',
       headers: {
         'Authorization': cookie.load('token'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: 'competitionTitle='+this.state.competitionTitle+'&pageNum='+this.state.nowPage+'&pageSize='+this.state.pageSize
+      body: 'lectureTitle='+this.state.lectureTitle+'&pageNum='+this.state.nowPage+'&pageSize='+this.state.pageSize
     }).then( res=> res.json()).then(
       data => {
         if (data.code==0) {
@@ -196,8 +180,8 @@ class AllAnnounce extends React.Component{
       }
     )
   }
-  competitionTitleChange(e) {
-    this.setState({competitionTitle: e.target.value}, ()=>this.getClass());
+  lectureTitleChange(e) {
+    this.setState({lectureTitle: e.target.value}, ()=>this.getClass());
   }
   pageChange = (page) => {
     console.log(page);
@@ -215,7 +199,7 @@ class AllAnnounce extends React.Component{
         </div>
         <div className="searchF">
          <div className="example-input">
-          <Input size="small" onChange={this.competitionTitleChange} placeholder="校赛名" style={{height:30 , width:150}}/>
+          <Input size="small" onChange={this.lectureTitleChange} placeholder="校赛名" style={{height:30 , width:150}}/>
           &nbsp;&nbsp;<Button type="primary" shape="circle" icon="search" onClick={this.buttonClick}/>
           </div>
         </div>
@@ -230,7 +214,7 @@ class AllAnnounce extends React.Component{
     );
   }
 }
-class ShowCompetition extends React.Component{
+class ShowLecture extends React.Component{
   constructor(props) {
     super(props);
     this.state={
@@ -248,19 +232,11 @@ class ShowCompetition extends React.Component{
     this.setState({id: cid})
   }
   render() {
-    console.log('show:'+this.state.show)
-    let sh;
-    if (this.state.show==1) {
-      sh = <AllAnnounce />
-    } else {
-    console.log('id:'+this.state.id)
-      sh = <UpdateAnnouncement announceId={this.state.id}/>
-    }
     return(
       <div>
-      {sh}
+      <AllAnnounce />
       </div>
     );
   }
 }
-export default ShowCompetition;
+export default ShowLecture;

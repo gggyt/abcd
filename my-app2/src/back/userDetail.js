@@ -281,7 +281,7 @@ class UserDetail extends React.Component{
         'Authorization': cookie.load('token'),
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: 'userId='+this.props.userId
+      body: 'userId='+this.props.match.params.id
 
       }).then(res => res.json()).then(
         data => {
