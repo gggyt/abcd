@@ -8,6 +8,7 @@ import E from 'wangeditor';
 import {AddInvitation} from '../config/router.js';
 import MobileHome from './homeIndex';
 import UserInfo from './my/myIndex';
+import AllProblem from './problem/showProblem';
 
 import { TabBar } from 'antd-mobile';
 
@@ -69,22 +70,21 @@ class MobileFirst extends React.Component {
           </TabBar.Item>
           <TabBar.Item
             icon={
-              <Icon type="setting" style={{ fontSize: '23px' }} />
+              <Icon type="plus-circle" style={{ fontSize: '23px' }} />
             }
             selectedIcon={
-              <Icon type="setting" style={{ fontSize: '23px' }} theme="twoTone" twoToneColor="#FF8C69" />
+              <Icon type="plus-circle" style={{ fontSize: '23px' }} theme="twoTone" twoToneColor="#FF8C69" />
             }
             title="今日一题"
-            key="Koubei"
-            selected={this.state.selectedTab === 'redTab'}
+            key="my"
+            selected={this.state.selectedTab === 'yellowTab'}
             onPress={() => {
               this.setState({
-                selectedTab: 'redTab',
+                selectedTab: 'yellowTab',
               });
             }}
-            data-seed="logId1"
           >
-            <UserInfo />
+            <AllProblem />
           </TabBar.Item>
           <TabBar.Item
             icon={

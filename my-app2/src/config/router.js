@@ -95,3 +95,9 @@ export const WLoginUrl = localhost+"/wInfo";
 export const GetIndexInfo = localhost+"/info/getIndexInfo";
 export const GetLecComInfo = localhost+"/info/selectLecComInfo";
 export const GetNewAnnInfo = localhost+"/info/selectNewAnnoInfo";
+
+export const SelectProblem = localhost+"/problem/selectProblem";
+export const AddProblemUrl = localhost+"/problem/addProblem";
+export const AddAnsUrl = localhost+"/problem/addAns";
+export const DetailProblemUrl = localhost+"/problem/problemDetail";
+export const SelectReplyUrl = localhost+"/problem/selectReply";

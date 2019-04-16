@@ -36,6 +36,10 @@ import MobileLectureDetail from './mobile/lecture/lectureDetail';
 import AllMyLecture from './mobile/lecture/myLecture';
 import ShowFriend from './mobile/friendurl/showFriendUrl';
 import UserInfo from './mobile/my/myIndex';
+import AddProblem from './mobile/problem/addProblem';
+import ResultProblem from './mobile/problem/resultProblem';
+import AddAns from './mobile/problem/addAns';
+import MobileProblemDetail from './mobile/problem/problemDetail';
 
 import SidebarExample from './tesezc';
 import 'antd-mobile/dist/antd-mobile.css';
@@ -75,6 +79,12 @@ class App extends React.Component {
                     <Route path="/mobile/lectureDetail/:id" component={MobileLectureDetail} />
                     <Route path="/mobile/friendurl" component={ShowFriend} />
                     <Route path="/mobile/myIndex" component={UserInfo} />
+                    <Route path="/addProblem" component={AddProblem} />
+                    <Route path="/addProblemSuccess/:id" component={ResultProblem} />
+                    <Route path="/addAns/:id" component={AddAns} />
+                    <Route path="/problemDetail/:id" component={MobileProblemDetail} />
+
+
                     <Route path="/mobilefirst" component={MobileFirst} />
                     <Route path="/mobilelogin" component={MobileLogin} />
                     
